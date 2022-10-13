@@ -1,5 +1,6 @@
 import javax.swing.*;
 
+//Class to create window
 public class GameFrame extends JFrame {
 
     GameFrame(){
