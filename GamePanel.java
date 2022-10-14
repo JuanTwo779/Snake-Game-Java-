@@ -9,7 +9,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_WIDTH = 750; //starts from bottom left of frame
     static final int SCREEN_HEIGHT = 750; //starts from top of frame
     static final int UNIT_SIZE = 25;
-    static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
+    static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE; //number of tiles in window
     static final int DELAY = 75;
     final int x[] = new int[GAME_UNITS]; //holds body of the snake in x-coords
     final int y[] = new int[GAME_UNITS]; //holds body of the snake in y-coords
@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setBackground(Color.black);
         this.setFocusable(true);
 
-        this.addKeyListener(new MyKeyAdapter());
+        this.addKeyListener(new MyKeyAdapter()); //inner class instance
         startGame();
     }
 
@@ -162,7 +162,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public class MyKeyAdapter extends KeyAdapter{
         @Override
-        public void keyPressed(KeyEvent e){
+        public void keyPressed(KeyEvent e){ //if certain buttons are pressed, direction is changed
             switch(e.getKeyCode()){
                 case KeyEvent.VK_LEFT:
                     if (direction != 'R'){
