@@ -1,14 +1,14 @@
-import javax.swing.*;
+import javax.swing.*; //Graphics
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 
-
+//class for things in the window
 public class GamePanel extends JPanel implements ActionListener {
 
     static final int SCREEN_WIDTH = 600;
     static final int SCREEN_HEIGHT = 600;
-    static final int UNIT_SIZE = 25;
+    static final int UNIT_SIZE = 15;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
     static final int DELAY = 75;
     final int x[] = new int[GAME_UNITS]; //holds body of the snake in x-coords
@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements ActionListener {
     Random random; //Random class
 
     GamePanel(){
-        random = new Random();
+        random = new Random(); //makes object for all methods called by constructor, to use
         //JPanel methods
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
@@ -42,7 +42,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     //swing method
     public void paintComponent(Graphics g){
-        super.paintComponent(g);
+        super.paintComponent(g); //super cals the super class (JPanel) method
         draw(g);
     }
 
@@ -51,14 +51,46 @@ public class GamePanel extends JPanel implements ActionListener {
             g.drawLine(i*UNIT_SIZE,0,i*UNIT_SIZE,SCREEN_HEIGHT); //draws line from (x1,y1) to (x2,y2)
             g.drawLine(0, i*UNIT_SIZE,SCREEN_WIDTH,i*UNIT_SIZE);
         }
+        g.setColor(Color.red);
+        g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+
+        for (int i = 0; i < bodyParts; i++) {
+            if (i == 0) { //head of snake
+                g.setColor(Color.orange);
+                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            }
+            else{
+                g.setColor(new Color(45,180,0));
+                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            }
+        }
     }
 
     public void newApple(){
-
+        appleX = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
+        appleX = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
     }
 
     public void move(){
+        for (int i = bodyParts; i < 0; i--) {
+            x[i] = x[i-1];
+            y[i] = y[i-1];
+        }
 
+        switch(direction) {
+        case 'U':
+            y[0] = y[0] - UNIT_SIZE;
+            break;
+        case 'D':
+            y[0] = y[0] + UNIT_SIZE;
+            break;
+        case 'L':
+            x[0] = x[0] - UNIT_SIZE;
+            break;
+        case 'R':
+            x[0] = x[0] + UNIT_SIZE;
+            break;
+        }
     }
 
     public void checkApple(){
