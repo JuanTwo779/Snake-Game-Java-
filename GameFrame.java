@@ -13,7 +13,7 @@ public class GameFrame extends JFrame {
         this.setResizable(false);
         this.pack(); //makes things fit snugly
         this.setVisible(true);
-        this.setLocationRelativeTo(null); //puts window in middle
+        this.setLocationRelativeTo(null); //puts window in middle of screen
     }
 
 }
