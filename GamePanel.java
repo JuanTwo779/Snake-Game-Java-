@@ -6,9 +6,9 @@ import java.util.Random;
 //class for things in the window
 public class GamePanel extends JPanel implements ActionListener {
 
-    static final int SCREEN_WIDTH = 600;
-    static final int SCREEN_HEIGHT = 600;
-    static final int UNIT_SIZE = 15;
+    static final int SCREEN_WIDTH = 750; //starts from bottom left of frame
+    static final int SCREEN_HEIGHT = 750; //starts from top of frame
+    static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
     static final int DELAY = 75;
     final int x[] = new int[GAME_UNITS]; //holds body of the snake in x-coords
@@ -42,7 +42,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     //swing method
     public void paintComponent(Graphics g){
-        super.paintComponent(g); //super cals the super class (JPanel) method
+        super.paintComponent(g); //super calls the super class (JPanel) method
         draw(g);
     }
 
@@ -56,7 +56,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         for (int i = 0; i < bodyParts; i++) {
             if (i == 0) { //head of snake
-                g.setColor(Color.orange);
+                g.setColor(new Color(34,139,34));
                 g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
             }
             else{
@@ -72,8 +72,9 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void move(){
-        for (int i = bodyParts; i < 0; i--) {
-            x[i] = x[i-1];
+        //switches body parts
+        for (int i = bodyParts; i > 0; i--) {
+            x[i] = x[i-1]; //i.e. x[6] becomes x[5], x[5] becomes x[4]...
             y[i] = y[i-1];
         }
 
@@ -98,7 +99,31 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void checkCollisions(){
+        for (int i = bodyParts; i > 0; i--) { //head touches body
+            if ((x[0] == x[i]) && (y[0] == y[i])) {
+                running = false;
+            }
+        }
+        //head touches left border
+        if (x[0] < 0){
+            running = false;
+        }
+        //head touches right border
+        if (x[0] > SCREEN_WIDTH){
+            running = false;
+        }
+        //head touches top border
+        if (y[0] < 0){
+            running = false;
+        }
+        //head touches bottom border
+        if (y[0] > SCREEN_HEIGHT){
+            running = false;
+        }
 
+        if (!running){
+            timer.stop();
+        }
     }
 
     public void gameOver(Graphics g){
@@ -107,7 +132,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if(running){
+            move();
+            checkApple();
+            checkCollisions();
+        }
+        repaint();
     }
 
     public class MyKeyAdapter extends KeyAdapter{
